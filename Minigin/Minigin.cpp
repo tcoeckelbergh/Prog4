@@ -11,6 +11,9 @@
 #include "TextComponent.h"
 #include "TextureComponent.h"
 
+//******************************
+// TEST CHANGE COMMIT FOR GIT
+//******************************
 
 void dae::Minigin::Initialize()
 {
