@@ -64,6 +64,13 @@ void dae::Minigin::LoadGame() const
 	m_FpsCounter->AddComponent(new TextComponent("FPS", fpsFont));
 	m_FpsCounter->GetComponent<TextComponent>()->SetPosition(10, 10);
 	scene.Add(m_FpsCounter);
+
+	// INPUT (MOVE TO GAMECODE)
+	auto& inputM = InputManager::GetInstance();
+	inputM.AssignButton(dae::ControllerButton::ButtonY, new JumpCommand());
+	inputM.AssignButton(dae::ControllerButton::ButtonX, new FireCommand());
+	inputM.AssignButton(dae::ControllerButton::ButtonB, new FartCommand());
+	inputM.AssignButton(dae::ControllerButton::ButtonA, new DuckCommand());
 }
 
 void dae::Minigin::Cleanup()
@@ -95,13 +102,13 @@ void dae::Minigin::Run()
 		// getting to 60 FPS there is no need for a more complex loop to account for this issue.
 		//	This gameloop just provides us with a cap on the framerate at 60FPS so that the game
 		// doesn't run faster depending on the power of your machine
-		bool doContinue = true;
-		while (doContinue)
+		while (true)
 		{
 			auto start = std::chrono::high_resolution_clock::now();
 
-			doContinue = input.ProcessInput();
-
+			input.ProcessInput();
+			if (InputManager::GetInstance().IsPressed(dae::ControllerButton::ButtonX))
+				break;
 
 			sceneManager.Update();
 

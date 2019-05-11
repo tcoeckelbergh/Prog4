@@ -1,42 +1,30 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
 #include <SDL.h>
+#include <iostream>
+#include <algorithm>
 
-
-bool dae::InputManager::ProcessInput()
+dae::InputManager::~InputManager()
 {
-	ZeroMemory(&currentState, sizeof(XINPUT_STATE));
-	XInputGetState(0, &currentState);
+	std::for_each(m_ButtonCommands.begin(), m_ButtonCommands.end(),
+		[](auto pair) { delete pair.second; });
+}
 
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
-			return false;
-		}
-		if (e.type == SDL_KEYDOWN) {
+void dae::InputManager::ProcessInput()
+{
+	ZeroMemory(&m_State, sizeof(XINPUT_STATE));
+	XInputGetState(0, &m_State);
 
-		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-
-		}
-	}
-
-	return true;
+	std::for_each(m_ButtonCommands.begin(), m_ButtonCommands.end(),
+		[this](std::pair<ControllerButton, Command*> pair) { if (IsPressed(pair.first)) pair.second->Execute(); });
 }
 
 bool dae::InputManager::IsPressed(ControllerButton button) const
 {
-	switch (button)
-	{
-	case ControllerButton::ButtonA:
-		return currentState.Gamepad.wButtons & XINPUT_GAMEPAD_A;
-	case ControllerButton::ButtonB:
-		return currentState.Gamepad.wButtons & XINPUT_GAMEPAD_B;
-	case ControllerButton::ButtonX:
-		return currentState.Gamepad.wButtons & XINPUT_GAMEPAD_X;
-	case ControllerButton::ButtonY:
-		return currentState.Gamepad.wButtons & XINPUT_GAMEPAD_Y;
-	default: return false;
-	}
+	return ((m_State.Gamepad.wButtons & (WORD)button) != 0);
 }
 
+void dae::InputManager::AssignButton(ControllerButton button, Command* command)
+{
+	m_ButtonCommands[button] = command;
+}
