@@ -7,7 +7,13 @@
 #include "Renderer.h"
 #include "BaseComponent.h"
 
-dae::GameObject::~GameObject() = default;
+dae::GameObject::~GameObject()
+{
+	for (auto* pComponent : m_pComponents)
+	{
+		delete pComponent;
+	}
+}
 
 void dae::GameObject::Update()
 {
