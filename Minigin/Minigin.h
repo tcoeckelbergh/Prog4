@@ -5,6 +5,9 @@ struct SDL_Window;
 
 namespace dae
 {
+	//Global ScreenWidth and Height
+	static const int g_ScreenWidth = 640;
+	static const int g_ScreenHeight = 480;
 
 	class Minigin
 	{

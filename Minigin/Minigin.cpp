@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "TextComponent.h"
 #include "TextureComponent.h"
+#include "GridLevel.h"
 
 //******************************
 // TEST CHANGE COMMIT FOR GIT
@@ -26,8 +27,8 @@ void dae::Minigin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		g_ScreenWidth,
+		g_ScreenHeight,
 		SDL_WINDOW_OPENGL
 	);
 	if (window == nullptr)
